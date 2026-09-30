@@ -13,10 +13,15 @@ router.use('/categories', categoryRoutes);
 router.use('/devices', deviceRoutes);
 router.use('/stats', statsRoutes);
 
+import mongoose from 'mongoose';
+
 // Health check endpoint
 router.get('/health', (req, res) => {
+  const dbStatus = mongoose.connection.readyState === 1 ? 'connected' : 'disconnected';
   res.status(200).json({
     status: 'healthy',
+    database: dbStatus,
+    databaseHost: mongoose.connection.host || 'none',
     timestamp: new Date().toISOString(),
     service: 'IoT Knowledge Portal API',
   });
