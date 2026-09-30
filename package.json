@@ -16,6 +16,7 @@
     "test": "npm run test --workspace=server"
   },
   "devDependencies": {
+    "@vercel/node": "^16.0.2",
     "concurrently": "^9.1.2"
   },
   "keywords": [
