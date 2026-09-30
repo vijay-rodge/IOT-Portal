@@ -54,9 +54,8 @@ export const createApp = (): Express => {
   // Rate Limiting on API
   app.use('/api', apiLimiter);
 
-  // Mount API Routes (support both /api/* and direct subpaths)
+  // Mount API Routes
   app.use('/api', apiRoutes);
-  app.use('/', apiRoutes);
 
   // 404 Handler
   app.use(notFoundHandler);
