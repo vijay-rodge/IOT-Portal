@@ -62,7 +62,6 @@ export const Register: React.FC = () => {
         )}
 
         {/* Email & Password Registration Form */}
-
         <form onSubmit={handleSubmit} className="space-y-3.5">
           <div>
             <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
@@ -100,7 +99,7 @@ export const Register: React.FC = () => {
 
           <div>
             <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-              Password (min. 8 characters with letter & number)
+              Password (min. 8 characters)
             </label>
             <div className="relative">
               <Lock className="w-4 h-4 absolute left-3 top-3 text-slate-400" />
