@@ -54,7 +54,12 @@ A comprehensive, production-quality educational and technical reference platform
 iot-knowledge-portal/
 ├── client/
 │   ├── public/
-│   │   └── favicon.svg
+│   │   ├── favicon.svg
+│   │   ├── pwa-64x64.png
+│   │   ├── pwa-192x192.png
+│   │   ├── pwa-512x512.png
+│   │   ├── maskable-icon-512x512.png
+│   │   └── apple-touch-icon.png
 │   ├── src/
 │   │   ├── components/
 │   │   │   ├── category/     # CategoryCard
@@ -285,6 +290,69 @@ Test coverage includes:
 4. **Rate Limiting**: Authentication endpoints are rate-limited to prevent brute-force attacks.
 5. **MongoDB Injection Protection**: ObjectIDs are validated and queries sanitized.
 6. **Input Validation**: Strict Zod schema parsing on all user-supplied request payloads.
+
+---
+
+## 📱 Progressive Web App (PWA)
+
+The IoT Knowledge Portal is configured as a fully compliant, production-grade Progressive Web App (PWA) powered by `vite-plugin-pwa` and Google Workbox.
+
+### 🌟 Key Capabilities
+* **Offline Access**: Complete offline availability for the application shell, UI assets, and previously browsed IoT device specifications and category catalogs.
+* **Network Status Detection**: Real-time reactive offline/online indicator banner alerting users when network connectivity is lost or restored.
+* **Smart Offline Fallbacks**: Informative, branded fallback component (`OfflineFallback`) when uncached hardware items are requested while disconnected.
+* **Prompted Service Worker Updates**: Real-time notification badge when a new portal release or cache update is available with a 1-click reload trigger.
+* **App Shell Preloader**: Zero blank screens during service worker registration or cold boots via inline SVG/CSS hardware loader.
+* **Strict Security Boundary**: Under NO circumstances are private user profiles, admin consoles, or JWT tokens cached by the service worker (`/api/auth/*`, `/api/users/*`, `/api/admin/*` are strictly `NetworkOnly`).
+
+### 📦 Caching Architecture
+
+| Resource Category | Strategy | Cache Name / Expiration |
+|---|---|---|
+| **App Shell (HTML/JS/CSS)** | Precaching (Workbox) | Versioned revision hash |
+| **Google Fonts & Web Fonts** | `CacheFirst` | 1 year (30 entries max) |
+| **Static Images & Icons** | `CacheFirst` | 60 days (100 entries max) |
+| **Public IoT Catalog APIs** (`/api/categories`, `/api/devices`, `/api/stats/overview`) | `NetworkFirst` (10s timeout) | 24 hours (100 entries max) |
+| **Auth & Protected APIs** (`/api/auth/*`, `/api/users/*`, `/api/admin/*`) | `NetworkOnly` | **NEVER CACHED** |
+
+### 📲 How to Install the PWA
+
+#### Desktop (Google Chrome, Microsoft Edge, Brave)
+1. Navigate to the portal URL in your browser.
+2. Click the **"Install App"** prompt that appears at the bottom-right corner, or click the **Install icon** in the browser address bar (top right).
+3. Confirm by clicking **Install**. The IoT Knowledge Portal will launch in its own standalone window with a native titlebar and desktop shortcut.
+
+#### Mobile Android (Chrome, Edge, Samsung Internet)
+1. Open the website in Chrome or Edge on Android.
+2. Tap the floating **"Install IoT Portal"** banner, or tap the three dots `⋮` menu > **Add to Home screen** / **Install app**.
+3. Confirm the prompt. The app will install to your app drawer and home screen.
+
+#### iOS Safari (iPhone / iPad)
+1. Open the website in **Safari** on iOS.
+2. Tap the **Share** button (box with an arrow pointing upward).
+3. Scroll down and tap **"Add to Home Screen"**.
+4. Tap **Add** in the top-right corner. The app will appear with its native touch icon and run in full-screen standalone mode without Safari browser chrome.
+
+### 💻 Supported Platforms & Browsers
+* **Desktop**: Google Chrome 80+, Microsoft Edge 80+, Brave, Mozilla Firefox (standard web + offline caching), Safari 14+ on macOS.
+* **Mobile**: Android Chrome, Android Edge, Samsung Internet, iOS Safari 14+ (Add to Home Screen).
+
+### 🛠️ PWA Development & Build Instructions
+
+#### Development Mode
+```bash
+# Run client dev server with proxy to backend
+npm run dev --prefix client
+```
+
+#### Production Build
+```bash
+# Build server and client PWA bundle (generates dist/sw.js and manifest)
+npm run build
+
+# Or build client PWA independently
+npm run build --prefix client
+```
 
 ---
 
